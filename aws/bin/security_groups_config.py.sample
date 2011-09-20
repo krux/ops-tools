@@ -1,0 +1,86 @@
+### This is a list of IPs that cloudkick monitors from.
+### The up to date list is here: https://api.cloudkick.com/1.0/monitor_ips
+cloudkick_ips = (
+    "184.72.185.239", 
+    "184.73.0.219", 
+    "67.202.50.86", 
+    "67.202.4.96", 
+    "184.106.174.143", 
+    "184.106.174.142", 
+    "184.106.175.90", 
+    "184.106.175.12", 
+    "184.106.175.10", 
+    "184.106.175.6", 
+    "184.106.174.12", 
+    "184.106.174.217", 
+    "184.106.174.48", 
+    "184.106.174.63", 
+    "184.106.174.31", 
+    "184.106.177.181", 
+    "184.106.177.244", 
+    "184.106.177.185", 
+    "184.106.174.8", 
+    "184.106.174.9", 
+    "184.106.174.62", 
+    "184.106.174.66", 
+    "184.106.174.39", 
+    "184.106.175.99", 
+    "184.106.175.57", 
+    "184.106.177.228", 
+    "184.106.174.61", 
+    "184.106.174.58"
+)
+
+office_ips = (
+    #"1.2.3.4",
+)
+
+home_ips = (
+    #"5.6.7.8",
+)
+
+ANY             = '0.0.0.0/0'
+AWS_INTERNAL_IP = '10.0.0.0/8'
+ALL_SG          = "*"
+AWS_ACCOUNT_ID  = 123456789012
+
+MASTER_REGION   = 'us-east-1'
+
+HTTP_PORT               = 80
+HTTPS_PORT              = 443
+SYSLOG_PORT             = 514
+RABBIT_PORT             = 5672
+REDIS_PORT              = 6379
+GENERIC_HTTP            = 8080
+PROXY_PORT              = 8080
+PUPPET_RUN_PORT         = 8139
+PUPPET_PORT             = 8140
+PUPPET_PORT_JIB         = 8180
+
+KSG_CONFIG = {
+    "icmp": { 
+        ### target security group
+        "*": { 
+            ### source sg/ip    target ports/ranges
+            cloudkick_ips:      (None,None),
+            office_ips:         (None,None),
+        },
+    },
+    ### protocol
+    "tcp": {
+        ### target security group
+        ALL_SG: {
+            ### source sg/ip    target ports/ranges
+            office_ips:             (22,),
+        },
+        "default": {
+            ANY:                (HTTP_PORT, HTTPS_PORT),
+        },        
+        "command-control": {
+            ALL_SG:             (PUPPET_PORT, PUPPET_PORT_JIB),     # puppetmaster
+            office_ips:         (PUPPET_PORT, PUPPET_PORT_JIB),
+        },
+    },    
+    ### protocol
+    "udp": { },
+}

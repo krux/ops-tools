@@ -1,0 +1,48 @@
+#cloud-config
+
+### update the machine on boot
+### universe/multiverse added by start_instance.py
+apt_sources:
+ - source: "ppa:mathiaz/puppet-backports"
+ 
+apt_update: true
+apt_upgrade: true
+
+ssh-rsa: AAAAB3Nz.....+ujFHz
+
+### setup puppet
+puppet:
+ # Every key present in the conf object will be added to puppet.conf:
+ # [name]
+ # subkey=value
+ conf:
+   puppetd:
+     ### Replace with 'puppet.mydomain.com' if DNS doesn't resolve thsi for you
+     server: "puppet"
+     # certname supports substitutions at runtime:
+     #   %i: instanceid 
+     #       Example: i-0123456
+     #   %f: fqdn of the machine
+     #       Example: ip-X-Y-Z.cloud.internal
+     #
+     # NB: the certname will automatically be lowercased as required by puppet
+     certname: "%i.%f"
+     
+     ### how often to run puppetd, defaults to 1800 seconds
+     runinterval: 60
+   # ca_cert is a special case. It won't be added to puppet.conf.
+   # It holds the puppetmaster certificate in pem format. 
+   # It should be a multi-line string (using the | yaml notation for 
+   # multi-line strings).
+   # The puppetmaster certificate is located in 
+   # /var/lib/puppet/ssl/ca/ca_crt.pem on the puppetmaster host.
+   #
+   ca_cert: |
+      -----BEGIN CERTIFICATE-----
+      ......
+
+### aws specific data
+aws:
+  ### make sure this bucket exists and you have permissions to it
+  s3_instance_bucket: "instances"
+

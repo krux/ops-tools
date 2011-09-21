@@ -9,31 +9,70 @@
 ### AWS: Security Groups ###
 ############################
 * chdir to the 'aws/bin' directory
-* Copy the file security_groups_config.py.sample to security_groups_config.py
-* Edit the file with settings that are relevant to you
-* Run 'python ./security_groups.py -h' and follow the instructions
+* copy the file security_groups_config.py.sample to security_groups_config.py
+* edit the file with settings that are relevant to you
+* run 'python ./security_groups.py -h' and follow the instructions
 
 ###########################
 ### AWS: Start instance ###
 ###########################
 * chdir to the 'etc' directory
-* Copy the file 'user-data.yaml.sample' to 'user-data.yaml'
-* Edit the file with settings that are relevant to you
+* copy the file 'user-data.yaml.sample' to 'user-data.yaml'
+* edit the file with settings that are relevant to you
 * chdir to the 'aws/bin' directory
-* Run 'python ./start_instance.py -h' and follow the instructions
+* run 'python ./start_instance.py -h' and follow the instructions
 
 ############################
 ### Puppet: check_csr.py ###
 ############################
-* Add the following line to roots crontab, substituting path & bucket as needed:
+* add the following line to roots crontab, substituting path & bucket as needed:
   */2 * * * * /path/to/puppet/bin/check_csr.py --log-level=debug --bucket=instances
 
 ##################################
 ### Puppet: node_classifier.py ###
 ##################################
-* Add the following line to your puppet.conf master section, substituting path & bucket as needed:
+* add the following line to your puppet.conf master section, substituting path & bucket as needed:
   external_nodes = /path/to/puppet/bin/node_classifier.py --bucket instances
 
 #############################
 ### Puppet: update_env.pl ###
 #############################
+* the code expects a lay out of:
+  bin/[puppet scripts]
+  env/
+    development/[puppet modules]
+    staging/
+    production/[puppet modules]
+* if your layout is different, please edit the code as needed. 
+* if not, simply symlink puppet/bin to puppets $confdir/bin
+* chdir to '$confdir/bin'
+* run 'perl update_env.pl -h' and follow the instructions
+
+################################
+### Puppet: new_component.pl ###     
+################################
+* the code expects a lay out of:
+  bin/[puppet scripts]
+  env/
+    development/[puppet modules]
+    staging/
+    production/[puppet modules]
+* if your layout is different, please edit the code as needed.
+* if not, simply symlink puppet/bin to puppets $confdir/bin
+* chdir to '$confdir/bin'
+* run 'perl new_component.pl' and follow the instructions
+
+############################################
+### Puppet: run_puppet_master_locally.pl ###
+############################################
+* the code expects a lay out of:
+  bin/[puppet scripts]
+  env/
+    development/[puppet modules]
+    staging/
+    production/[puppet modules]
+* if your layout is different, please edit the code as needed.
+* if not, simply symlink puppet/bin to puppets $confdir/bin
+* chdir to '$confdir/bin'
+* run 'perl run_puppet_master_locally.pl' and follow the instructions
+

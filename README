@@ -1,15 +1,39 @@
-
 ##########################
 ### Boto Configuration ###
 ##########################
 * chdir to the 'etc' directory
-* copy the dot.boto file to ~/.boto and edit the credentials
+* copy the dot.boto file to ~/.boto AND /root/.boto and edit the credentials
 * see the boto homepage for details: http://code.google.com/p/boto/
 
-#######################
-### Security Groups ###
-#######################
+############################
+### AWS: Security Groups ###
+############################
 * chdir to the 'aws/bin' directory
 * Copy the file security_groups_config.py.sample to security_groups_config.py
 * Edit the file with settings that are relevant to you
 * Run 'python ./security_groups.py -h' and follow the instructions
+
+###########################
+### AWS: Start instance ###
+###########################
+* chdir to the 'etc' directory
+* Copy the file 'user-data.yaml.sample' to 'user-data.yaml'
+* Edit the file with settings that are relevant to you
+* chdir to the 'aws/bin' directory
+* Run 'python ./start_instance.py -h' and follow the instructions
+
+############################
+### Puppet: check_csr.py ###
+############################
+* Add the following line to roots crontab, substituting path & bucket as needed:
+  */2 * * * * /path/to/puppet/bin/check_csr.py --log-level=debug --bucket=instances
+
+##################################
+### Puppet: node_classifier.py ###
+##################################
+* Add the following line to your puppet.conf master section, substituting path & bucket as needed:
+  external_nodes = /path/to/puppet/bin/node_classifier.py --bucket instances
+
+#############################
+### Puppet: update_env.pl ###
+#############################
